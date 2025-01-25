@@ -18,6 +18,7 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/snowstorm/configuration.nix
+          ./hosts/snowstorm/hardware-configuration.nix
           ./modules/docker.nix
           ./modules/packages.nix
           ./modules/users.nix
