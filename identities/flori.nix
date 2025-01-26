@@ -1,9 +1,8 @@
 {
-  pubkeys = {
-    star_ssh =
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINBnstd9HyyIjfXWfGymWDcRlK9nZuqgTIcueiqPUDaQ star@starforge";
-  };
+  pubkeys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINBnstd9HyyIjfXWfGymWDcRlK9nZuqgTIcueiqPUDaQ star.star_ssh@starforge"
+  ];
   password =
-    "$argon2id$v=19$m=16000,t=4,p=8$ZmQyNDU0ZTBlNzRmMTU3MzQ0NGNkNzRlMzJkNDIzM2NiYWZlYzk3ZjcxZTEwOTI4ZWE1OGJlZDUwMjA0NzI2NA$u36BRZGQrSfIAMdFmG3wDMbajxHe6+jps7vblpuUwaM";
+    "$y$j9T$yZbN6c5.VKKXfw3iV9.nr/$PGj/aswpLO1C0T9A1.PqXiSfeGRHeHARDVdE/ZQr349";
   username = "star";
 }
