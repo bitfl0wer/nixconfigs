@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 
 {
 
@@ -21,8 +21,29 @@
         efiSupport = true;
       };
     };
-    initrd.luks.devices.cryptroot.device =
-      "/dev/disk/by-uuid/25802b28-9996-46d1-af80-f65e722c6f57";
+    initrd = {
+      availableKernelModules = [ "virtio-pci" ];
+      luks.devices.cryptroot.device =
+        "/dev/disk/by-uuid/25802b28-9996-46d1-af80-f65e722c6f57";
+      network = {
+        enable = true;
+        ssh = {
+          enable = true;
+          port = 2222;
+          hostECDSAKey = /var/src/secrets/dropbear/ecdsa-hostkey;
+          # this includes the ssh keys of all users in the wheel group
+          authorizedKeys = with lib;
+            concatLists (mapAttrsToList (name: user:
+              if elem "wheel" user.extraGroups then
+                user.openssh.authorizedKeys.keys
+              else
+                [ ]) config.users.users);
+        };
+        postCommands = ''
+          echo 'cryptsetup-askpass' >> /root/.protifle
+        '';
+      };
+    };
   };
 
   environment.etc.crypttab = {
