@@ -45,26 +45,6 @@
     };
   };
 
-  # Add a systemd service to generate keys if they are missing
-  systemd.services.generateInitrdSSHKeys = {
-    description = "Generate SSH keys for initrd";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = ''
-        mkdir -p /etc/secrets/initrd
-        for key_type in rsa ed25519; do
-          key_path="/etc/secrets/initrd/ssh_host_$\{key_type}_key"
-          if [ ! -f "$key_path" ]; then
-            ssh-keygen -t $key_type -f "$key_path" -N ""
-          fi
-        done
-      '';
-      Type = "oneshot";
-      RemainAfterExit = true;
-      before = "initrdSSH";
-    };
-  };
-
   # Ensure keys are included in the initrd
   boot.initrd.network.ssh.hostKeys = [
     "/etc/secrets/initrd/ssh_host_rsa_key"
