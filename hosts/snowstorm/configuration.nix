@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ inputs, lib, config, ... }:
 
 {
 
@@ -30,7 +30,6 @@
         ssh = {
           enable = true;
           port = 2222;
-          hostECDSAKey = /var/src/secrets/dropbear/ecdsa-hostkey;
           # this includes the ssh keys of all users in the wheel group
           authorizedKeys = with lib;
             concatLists (mapAttrsToList (name: user:
@@ -45,6 +44,36 @@
       };
     };
   };
+
+  # Add a systemd service to generate keys if they are missing
+  systemd.services.generateInitrdSSHKeys = {
+    description = "Generate SSH keys for initrd";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = ''
+        mkdir -p /etc/secrets/initrd
+        for key_type in rsa ed25519; do
+          key_path="/etc/secrets/initrd/ssh_host_$\{key_type}_key"
+          if [ ! -f "$key_path" ]; then
+            ssh-keygen -t $key_type -f "$key_path" -N ""
+          fi
+        done
+      '';
+      Type = "oneshot";
+      RemainAfterExit = true;
+      before = "initrdSSH";
+    };
+  };
+
+  # Ensure keys are included in the initrd
+  boot.initrd.network.ssh.hostKeys = [
+    "/etc/secrets/initrd/ssh_host_rsa_key"
+    "/etc/secrets/initrd/ssh_host_ed25519_key"
+  ];
+
+  # Optional: secure the directory with correct permissions
+  environment.etc."secrets/initrd".source = "/etc/secrets/initrd";
+  environment.etc."secrets/initrd".mode = "0700";
 
   environment.etc.crypttab = {
     mode = "0600";
