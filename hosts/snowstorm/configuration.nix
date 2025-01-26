@@ -1,6 +1,14 @@
-{ pkgs, ... }:
+{ inputs, ... }:
 
 {
+
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+    ../../modules/users.nix
+    ../../modules/packages.nix
+    ../../modules/networking.nix
+    ../../modules/docker.nix
+  ];
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -24,16 +32,6 @@
     LC_TELEPHONE = "de_DE.UTF-8";
     LC_TIME = "de_DE.UTF-8";
   };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.star = {
-    isNormalUser = true;
-    description = "star";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ];
-    shell = pkgs.zsh;
-  };
-  users.users.root.shell = pkgs.zsh;
 
   programs.zsh.enable = true;
 
