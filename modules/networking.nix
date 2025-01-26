@@ -1,4 +1,4 @@
-{config, lib, ... }:
+{ lib, ... }:
 
 {
   networking.hostName = "snowstorm"; # Define your hostname.
