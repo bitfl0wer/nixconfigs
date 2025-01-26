@@ -28,6 +28,8 @@
         specialArgs = {
           inherit inputs;
           hostname = "snowstorm";
+          identities.flori = import ./identities/flori.nix;
+          identities.viv = import ./identities/viv.nix;
         };
 
       };
