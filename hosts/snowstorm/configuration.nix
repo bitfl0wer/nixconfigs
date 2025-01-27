@@ -13,6 +13,7 @@
   ];
 
   boot = {
+    kernelParams = [ "ip=dhcp" ];
     loader = {
       efi.canTouchEfiVariables = true;
       grub = {
@@ -46,10 +47,8 @@
   };
 
   # Ensure keys are included in the initrd
-  boot.initrd.network.ssh.hostKeys = [
-    "/etc/secrets/initrd/ssh_host_rsa_key"
-    "/etc/secrets/initrd/ssh_host_ed25519_key"
-  ];
+  boot.initrd.network.ssh.hostKeys =
+    [ ../../secrets/ssh_host_ed25519_key ../../secrets/ssh_host_rsa_key ];
 
   # Optional: secure the directory with correct permissions
   environment.etc."secrets/initrd".source = "/etc/secrets/initrd";
