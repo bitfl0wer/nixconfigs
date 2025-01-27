@@ -54,21 +54,21 @@
   environment.etc."secrets/initrd".source = "/etc/secrets/initrd";
   environment.etc."secrets/initrd".mode = "0700";
 
-  environment.etc.crypttab = {
-    mode = "0600";
-    text = ''
-      # nvme0n1p3_crypt UUID=25802b28-9996-46d1-af80-f65e722c6f57 none luks,discard
-      # data /dev/sda /root/lukskey
-      # hdd1 UUID=119d760f-b661-42a7-9c36-c2c5dc3009b7 /root/lukskey2
-      vault8 UUID=3ea0931e-8f06-4b52-80ca-56c831a6f6a0 /etc/.crypt-vault8 nofail
-    '';
-  };
+  # environment.etc.crypttab = {
+  #   mode = "0600";
+  #   text = ''
+  #     # nvme0n1p3_crypt UUID=25802b28-9996-46d1-af80-f65e722c6f57 none luks,discard
+  #     # data /dev/sda /root/lukskey
+  #     # hdd1 UUID=119d760f-b661-42a7-9c36-c2c5dc3009b7 /root/lukskey2
+  #     vault8 UUID=3ea0931e-8f06-4b52-80ca-56c831a6f6a0 /etc/.crypt-vault8 nofail
+  #   '';
+  # };
 
-  fileSystems."/srv/vault8" = {
-    device = "/dev/mapper/vault8";
-    fsType = "auto";
-    options = [ "nofail" "users" ];
-  };
+  # fileSystems."/srv/vault8" = {
+  #   device = "/dev/mapper/vault8";
+  #   fsType = "auto";
+  #   options = [ "nofail" "users" ];
+  # };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
