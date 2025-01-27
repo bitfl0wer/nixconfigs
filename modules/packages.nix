@@ -23,6 +23,7 @@
     zoxide
     gh
     gnupg
+    git-crypt
 
   ];
   programs.zsh.enable = true;
