@@ -16,28 +16,6 @@
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.useOSProber = true;
 
-  boot = {
-    kernelParams = [ "ip=dhcp" ];
-    loader = { efi.canTouchEfiVariables = true; };
-    initrd = {
-      availableKernelModules = [ "virtio-pci" ];
-      network = {
-        enable = true;
-        ssh = {
-          enable = true;
-          port = 2222;
-          # this includes the ssh keys of all users in the wheel group
-          authorizedKeys = with lib;
-            concatLists (mapAttrsToList (name: user:
-              if elem "wheel" user.extraGroups then
-                user.openssh.authorizedKeys.keys
-              else
-                [ ]) config.users.users);
-        };
-      };
-    };
-  };
-
   # Ensure keys are included in the initrd
   boot.initrd.network.ssh.hostKeys =
     [ ../../secrets/ssh_host_ed25519_key ../../secrets/ssh_host_rsa_key ];
