@@ -12,20 +12,15 @@
     ../../modules/users.nix
   ];
 
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.useOSProber = true;
+
   boot = {
     kernelParams = [ "ip=dhcp" ];
-    loader = {
-      efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        device = "nodev";
-        efiSupport = true;
-      };
-    };
+    loader = { efi.canTouchEfiVariables = true; };
     initrd = {
       availableKernelModules = [ "virtio-pci" ];
-      luks.devices.cryptroot.device =
-        "/dev/disk/by-uuid/25802b28-9996-46d1-af80-f65e722c6f57";
       network = {
         enable = true;
         ssh = {
@@ -39,9 +34,6 @@
               else
                 [ ]) config.users.users);
         };
-        postCommands = ''
-          echo 'cryptsetup-askpass' >> /root/.protifle
-        '';
       };
     };
   };
