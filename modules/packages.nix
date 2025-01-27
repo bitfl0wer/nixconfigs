@@ -22,7 +22,8 @@
     bat
     zoxide
     gh
-    dropbear
+    gnupg
+
   ];
   programs.zsh.enable = true;
   # NixOS comes with a pre-configured SSH jail which will observe errors in the SSH daemon and ban offending IPs.
